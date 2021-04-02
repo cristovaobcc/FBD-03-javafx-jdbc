@@ -6,6 +6,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerts;
@@ -41,13 +42,18 @@ public class MainViewController implements Initializable{
 	
 	@FXML
 	public void onMenuItemDepartmentAction() {
-		loadView2("/gui/DepartmentList.fxml");
+		// Passando uma função de inicialização do controller DepartmentListController
+		loadView("/gui/DepartmentList.fxml", (DepartmentListController controller) -> {
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateTableView();
+		});
 	}
 	
 	
 	@FXML
 	public void onMenuItemAboutAction() {
-		loadView("/gui/About.fxml");
+		// A função x -> {} não faz nada.
+		loadView("/gui/About.fxml", x ->  {});
 	}
 	
 	@Override
@@ -55,8 +61,14 @@ public class MainViewController implements Initializable{
 		// TODO Auto-generated method stub
 	}
 	
-	
-	private synchronized void loadView(String absoluteName) { 
+	/**
+	 * Função genérica do tipo T que carrega uma view (absoluteName) e inicia um controlador com
+	 * uma função lambda passada no parâmetro.
+	 * @param <T>
+	 * @param absoluteName String
+	 * @param initializingAction Consumer< T >
+	 */
+	private synchronized <T> void loadView(String absoluteName, Consumer<T> initializingAction) { 
 		// com o synchronized o try não é interrompido durante o multithread.
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -80,29 +92,5 @@ public class MainViewController implements Initializable{
 		}
 	}
 	
-	private synchronized void loadView2(String absoluteName) { 
-		// com o synchronized o try não é interrompido durante o multithread.
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-			VBox newVBox = loader.load(); // Carrega os filhos da janela do parametro.
-			
-			Scene mainScene = Main.getMainScene();
-			
-			// Obtém os filhos da mainScene.
-			VBox mainVBox = ((VBox) ((ScrollPane) mainScene.getRoot()).getContent());
-			
-			Node mainMenu = mainVBox.getChildren().get(0); // obtém o 1o. filho da mainScene.
-			mainVBox.getChildren().clear(); // limpa todos os filhos da janela principal.
-			mainVBox.getChildren().add(mainMenu); // insere os filhos da janela principal.
-			mainVBox.getChildren().addAll(newVBox.getChildren()); // insere os filhos da janela que se está abrindo.
-			
-			DepartmentListController controller = loader.getController(); // obtém o controlador da view do parametro.
-			controller.setDepartmentService(new DepartmentService()); // injeta a dependência no controlador manualmente.
-			controller.updateTableView();
-			
-		}
-		catch(IOException e) {
-			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
-		}
-	}
+	
 }
