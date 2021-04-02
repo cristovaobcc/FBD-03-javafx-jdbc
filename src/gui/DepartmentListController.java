@@ -52,7 +52,8 @@ public class DepartmentListController implements Initializable {
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+		Department dept = new Department();
+		createDialogForm(dept,"/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	public void setDepartmentService(DepartmentService departmentService) {
@@ -93,14 +94,20 @@ public class DepartmentListController implements Initializable {
 	
 	
 	/**
-	 * Recebe o caminho de uma view fxml e recebe um Stage para criar uma janela de diálogo.
+	 * Recebe um dept Department, o caminho de uma view fxml e um Stage para criar uma 
+	 * janela de diálogo.
+	 * @param dept {@link Department}
 	 * @param absoluteName String
-	 * @param parentStage Stage
+	 * @param parentStage {@link Stage}
 	 */
-	private void createDialogForm(String absoluteName, Stage parentStage) {
+	private void createDialogForm(Department dept, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
+			// Injeta a dependência dept no controlador da tela de formulário:
+			DepartmentFormController dfController = loader.getController();
+			dfController.setDepartmentEntity(dept);
+			dfController.updateFormData();
 			
 			// Para carregar uma nova janela modal(que fica na frente e bloqueando a de baixo),
 			// temos que carregar um novo stage:
