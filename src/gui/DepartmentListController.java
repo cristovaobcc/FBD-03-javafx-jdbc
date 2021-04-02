@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -33,7 +34,7 @@ import model.services.DepartmentService;
  * Classe de controlle da view DepartmentList.fxml.
  *
  */
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
 	
 	private DepartmentService service;
 	
@@ -108,7 +109,10 @@ public class DepartmentListController implements Initializable {
 			DepartmentFormController dfController = loader.getController();
 			dfController.setDepartmentEntity(dept);
 			dfController.setDepartmentService(new DepartmentService());
+			dfController.subscribeDataChangeListener(this);
 			dfController.updateFormData();
+			
+			
 			
 			// Para carregar uma nova janela modal(que fica na frente e bloqueando a de baixo),
 			// temos que carregar um novo stage:
@@ -124,5 +128,11 @@ public class DepartmentListController implements Initializable {
 		} catch (IOException e) {
 			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	@Override
+	public void onDataChanged() {
+		updateTableView();
+		
 	}
 }

@@ -4,9 +4,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -26,10 +29,13 @@ import model.services.DepartmentService;
  *
  */
 public class DepartmentFormController implements Initializable {
-	
+			
 	private DepartmentService departmentService;
 	
 	private Department departmentEntity;
+	
+	// Lista de objetos interessados em receber o evento de mudança de dados.
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 	
 	@FXML
 	private TextField txtId;
@@ -62,6 +68,15 @@ public class DepartmentFormController implements Initializable {
 		this.departmentEntity = entity;
 	}
 	
+	/**
+	 * Registra um {@link DataChangeListener} que pode "ouvir" as mudanças de 
+	 * uma instância desta classe.
+	 * @param listener @DataChangeListener
+	 */
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
+	
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
 		
@@ -75,6 +90,7 @@ public class DepartmentFormController implements Initializable {
 		try {
 			departmentEntity = getFormData();
 			departmentService.saveOrUpdate(departmentEntity);
+			notifyDataChangeListeners(); 
 			Utils.currentStage(event).close();
 			
 		} catch (DbException e) {
@@ -83,6 +99,18 @@ public class DepartmentFormController implements Initializable {
 		
 	}
 	
+	/**
+	 * Executa o método DataChangeListener.onDataChanged() em cada listener inscrito na  
+	 * instância desta classe.
+	 */
+	private void notifyDataChangeListeners() {
+		
+		for (DataChangeListener dataChangeListener : dataChangeListeners) {
+			dataChangeListener.onDataChanged();
+		}
+		
+	}
+
 	/**
 	 * Obtém os dados da view DepartmentForm e devolve-os
 	 * configurados num Department.
