@@ -107,6 +107,7 @@ public class DepartmentListController implements Initializable {
 			// Injeta a dependência dept no controlador da tela de formulário:
 			DepartmentFormController dfController = loader.getController();
 			dfController.setDepartmentEntity(dept);
+			dfController.setDepartmentService(new DepartmentService());
 			dfController.updateFormData();
 			
 			// Para carregar uma nova janela modal(que fica na frente e bloqueando a de baixo),
