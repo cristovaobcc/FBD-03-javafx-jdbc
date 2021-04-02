@@ -27,5 +27,18 @@ public class DepartmentService {
 		return dao.findAll();
 		
 	}
+	
+	/**
+	 * Salva ou autaliza um Department dept passado. Salva, caso o id seja, nulo. 
+	 * Do contrário, ele atualiza com os novos dados.
+	 * @param dept Department
+	 */
+	public void saveOrUpdate(Department dept) {
+		if (dept.getId() == null) {
+			dao.insert(dept);
+		} else {
+			dao.update(dept);
+		}
+	}
 
 }
