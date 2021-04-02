@@ -7,12 +7,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import gui.util.Constraints;
+import gui.util.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Department;
+import model.services.DepartmentService;
 
 /**
  * Classe de controle de eventos da Gui DepartmentForm.fxml.
@@ -20,6 +22,8 @@ import model.entities.Department;
  *
  */
 public class DepartmentFormController implements Initializable {
+	
+	private DepartmentService departmentService;
 	
 	private Department departmentEntity;
 	
@@ -40,6 +44,14 @@ public class DepartmentFormController implements Initializable {
 	
 	/**
 	 * Configura um Department.
+	 * @param ds {@link DepartmentService}
+	 */
+	public void setDepartmentService(DepartmentService ds) {
+		this.departmentService = ds;
+	}
+	
+	/**
+	 * Configura um Department.
 	 * @param entity {@link Department}
 	 */
 	public void setDepartmentEntity(Department entity) {
@@ -48,9 +60,24 @@ public class DepartmentFormController implements Initializable {
 	
 	@FXML
 	public void onBtSaveAction() {
-		System.out.println("onBtSaveAction");
+		departmentEntity = getFormData();
+		departmentService.saveOrUpdate(departmentEntity);
 	}
 	
+	/**
+	 * Obtém os dados da view DepartmentForm e devolve-os
+	 * configurados num Department.
+	 * @return {@link Department}
+	 */
+	private Department getFormData() {
+
+		Department dept = new Department();
+		dept.setId(Utils.tryParseToInteger(txtId.getText()));
+		dept.setName(txtName.getText());
+		
+		return dept;
+	}
+
 	@FXML
 	public void onBtCancelAction() {
 		System.out.println("onBtCancelAction");
