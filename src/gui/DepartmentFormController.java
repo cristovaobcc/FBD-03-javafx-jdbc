@@ -12,12 +12,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.entities.Department;
 
 /**
  * Classe de controle de eventos da Gui DepartmentForm.fxml.
+ * Serve tanto para carregar dados de departamentos, como para inserir dados deles.
  *
  */
 public class DepartmentFormController implements Initializable {
+	
+	private Department departmentEntity;
 	
 	@FXML
 	private TextField txtId;
@@ -34,6 +38,13 @@ public class DepartmentFormController implements Initializable {
 	@FXML
 	private Button btCancel;
 	
+	/**
+	 * Configura um Department.
+	 * @param entity {@link Department}
+	 */
+	public void setDepartmentEntity(Department entity) {
+		this.departmentEntity = entity;
+	}
 	
 	@FXML
 	public void onBtSaveAction() {
@@ -54,5 +65,19 @@ public class DepartmentFormController implements Initializable {
 	private void initializeNodes() {
 		Constraints.setTextFieldInteger(txtId);
 		Constraints.setTextFieldMaxLength(txtName, 30);
+	}
+	
+	
+	/**
+	 * Popula os dados de Departament setado neste controller, para o formulário
+	 * DepartmentForm.fxml.
+	 */
+	public void updateFormData() {
+		
+		if (departmentEntity == null) {
+			throw new IllegalStateException("DepartmentEntity is null");
+		}
+		txtId.setText(String.valueOf(departmentEntity.getId()));
+		txtName.setText(departmentEntity.getName());
 	}
 }
