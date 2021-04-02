@@ -96,8 +96,8 @@ public class MainViewController implements Initializable{
 			mainVBox.getChildren().add(mainMenu); // insere os filhos da janela principal.
 			mainVBox.getChildren().addAll(newVBox.getChildren()); // insere os filhos da janela que se está abrindo.
 			
-			DepartmentListController controller = loader.getController();
-			controller.setDepartmentService(new DepartmentService());
+			DepartmentListController controller = loader.getController(); // obtém o controlador da view do parametro.
+			controller.setDepartmentService(new DepartmentService()); // injeta a dependência no controlador manualmente.
 			controller.updateTableView();
 			
 		}

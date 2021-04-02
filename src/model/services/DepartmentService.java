@@ -9,12 +9,15 @@ import java.util.List;
 import model.entities.Department;
 
 /**
- * 
+ * Serviços relacionados ao Department.
  *
  */
 public class DepartmentService {
 	
-	
+	/**
+	 * Devolve todos os Departments.
+	 * @return {@link List}< Department >
+	 */
 	public List<Department> findAll(){
 		// Dados mockados.
 		List<Department> list = new ArrayList<>();
