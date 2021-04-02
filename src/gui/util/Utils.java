@@ -31,4 +31,19 @@ public class Utils {
 	}
 	
 	
+	/**
+	 * Converte um valor string  para inteiro. Caso falhe,
+	 * devolve null.
+	 * @param str String
+	 * @return Integer
+	 */
+	public static Integer tryParseToInteger(String str) {
+		try {
+			return Integer.parseInt(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+		
+	}
+	
 }
