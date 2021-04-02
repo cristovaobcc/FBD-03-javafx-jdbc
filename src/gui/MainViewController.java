@@ -84,6 +84,9 @@ public class MainViewController implements Initializable{
 			mainVBox.getChildren().add(mainMenu); // insere os filhos da janela principal.
 			mainVBox.getChildren().addAll(newVBox.getChildren()); // insere os filhos da janela que se está abrindo.
 			
+			// ativa a função passada
+			T controller = loader.getController(); // carrega a variável controller(do tipo T).
+			initializingAction.accept(controller); // executa a função passada como argumento no parâmetro.
 			
 			
 		}
