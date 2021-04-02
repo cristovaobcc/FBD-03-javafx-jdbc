@@ -6,10 +6,14 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import db.DbException;
+import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -59,9 +63,24 @@ public class DepartmentFormController implements Initializable {
 	}
 	
 	@FXML
-	public void onBtSaveAction() {
-		departmentEntity = getFormData();
-		departmentService.saveOrUpdate(departmentEntity);
+	public void onBtSaveAction(ActionEvent event) {
+		
+		if (departmentEntity == null) {
+			throw new IllegalStateException("departmentEntity is null");
+		}
+		if (departmentService == null) {
+			throw new IllegalStateException("departmentService is null");
+		}
+		
+		try {
+			departmentEntity = getFormData();
+			departmentService.saveOrUpdate(departmentEntity);
+			Utils.currentStage(event).close();
+			
+		} catch (DbException e) {
+			Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
+		}
+		
 	}
 	
 	/**
@@ -79,8 +98,8 @@ public class DepartmentFormController implements Initializable {
 	}
 
 	@FXML
-	public void onBtCancelAction() {
-		System.out.println("onBtCancelAction");
+	public void onBtCancelAction(ActionEvent event) {
+		Utils.currentStage(event).close();
 	}
 
 	@Override
