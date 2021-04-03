@@ -6,9 +6,11 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import db.DbInegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
@@ -22,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -48,6 +51,9 @@ public class DepartmentListController implements Initializable, DataChangeListen
 	private TableColumn<Department, String> tableColumnName;
 	@FXML
 	private TableColumn<Department, Department> tableColumnEDIT;
+	@FXML
+	private TableColumn<Department, Department> tableColumnREMOVE;
+	
 	@FXML
 	private Button btNew;
 	
@@ -95,6 +101,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 		obsList = FXCollections.observableArrayList(list);
 		tableViewDepartment.setItems(obsList);
 		initEditButtons(); // Acrescenta um novo botão com o texto 'edit'
+		initRemoveButtons(); // Acrescenta um novo botão com o texto 'remove'
 		
 	}
 	
@@ -168,5 +175,59 @@ public class DepartmentListController implements Initializable, DataChangeListen
 								dept, "/gui/DepartmentForm.fxml", Utils.currentStage(event)));
 			}
 		});
+	}
+	
+	
+	/**
+	 * Cria um botão de remoção em cada linha da tabela de Deptos na coluna de remoção. 
+	 */
+	private void initRemoveButtons() {
+		
+		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnREMOVE.setCellFactory(param -> new TableCell<Department, Department> (){
+			
+			private final Button button = new Button("remove");
+			
+			@Override
+			protected void updateItem(Department dept, boolean empty) {
+				super.updateItem(dept, empty);
+				
+				if(dept == null) {
+					setGraphic(null);
+					return;
+				}
+				
+				setGraphic(button);
+				button.setOnAction(event -> removeDepartment(dept));
+			}					
+		});
+		
+	}
+
+	/**
+	 * Remove um departmento dept de uma linha da tela DepartmentList e do DB.
+	 * @param dept {@link Department}
+	 */
+	private void removeDepartment(Department dept) {
+		Optional<ButtonType> resultOptional = 
+				Alerts.showConfirmation("Confirmation", "Are you sure to delete?");
+		
+		if (resultOptional.get() == ButtonType.OK) { // Verifica se usuário apertou no OK button
+			
+			if (service == null) {
+				
+				throw new IllegalStateException("Service was null");
+			}
+			try {
+				
+				service.remove(dept); 
+				updateTableView();
+				
+			} catch (DbInegrityException e) { // uma exceção de integridade referencial pode ser lançada pelo DepartmentDaoJDBC
+				
+				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
+				
+			}
+		}
 	}
 }
