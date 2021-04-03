@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gui;
 
 import java.net.URL;
@@ -96,7 +93,11 @@ public class DepartmentFormController implements Initializable {
 			notifyDataChangeListeners(); 
 			Utils.currentStage(event).close();
 			
-		} catch (DbException e) {
+		} 
+		catch (ValidationException e) {
+			setErrorMessages(e.getErrors());
+		}
+		catch (DbException e) {
 			Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
 		}
 		
