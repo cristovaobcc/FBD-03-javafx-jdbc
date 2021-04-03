@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
-import db.DbInegrityException;
+import db.DbException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
@@ -223,7 +223,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 				service.remove(dept); 
 				updateTableView();
 				
-			} catch (DbInegrityException e) { // uma exceção de integridade referencial pode ser lançada pelo DepartmentDaoJDBC
+			} catch (DbException e) { // uma exceção de integridade referencial pode ser lançada pelo DepartmentDaoJDBC
 				
 				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
 				
