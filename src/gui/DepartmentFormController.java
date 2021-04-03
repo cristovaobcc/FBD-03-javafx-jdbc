@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Department;
+import model.exceptions.ValidationException;
 import model.services.DepartmentService;
 
 /**
@@ -119,8 +120,20 @@ public class DepartmentFormController implements Initializable {
 	private Department getFormData() {
 
 		Department dept = new Department();
+		
+		ValidationException excepValidationException = new ValidationException("Validation error");
+		
 		dept.setId(Utils.tryParseToInteger(txtId.getText()));
+		
+		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
+			excepValidationException.addError("name", "Field can't be empty");
+		}
+		
 		dept.setName(txtName.getText());
+		
+		if (excepValidationException.getErrors().size() > 0) {
+			throw excepValidationException;
+		}
 		
 		return dept;
 	}
