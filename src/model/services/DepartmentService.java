@@ -40,5 +40,13 @@ public class DepartmentService {
 			dao.update(dept);
 		}
 	}
+	
+	/**
+	 * Remove um {@link Department} dept do DB.
+	 * @param dept {@link Department}
+	 */
+	public void remove(Department dept) {
+		dao.deleteById(dept.getId());
+	}
 
 }
