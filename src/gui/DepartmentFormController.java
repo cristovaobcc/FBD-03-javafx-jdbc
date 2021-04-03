@@ -6,7 +6,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.DataChangeListener;
@@ -121,18 +123,18 @@ public class DepartmentFormController implements Initializable {
 
 		Department dept = new Department();
 		
-		ValidationException excepValidationException = new ValidationException("Validation error");
+		ValidationException validationException = new ValidationException("Validation error");
 		
 		dept.setId(Utils.tryParseToInteger(txtId.getText()));
 		
 		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
-			excepValidationException.addError("name", "Field can't be empty");
+			validationException.addError("name", "Field can't be empty");
 		}
 		
 		dept.setName(txtName.getText());
 		
-		if (excepValidationException.getErrors().size() > 0) {
-			throw excepValidationException;
+		if (validationException.getErrors().size() > 0) {
+			throw validationException;
 		}
 		
 		return dept;
@@ -166,5 +168,19 @@ public class DepartmentFormController implements Initializable {
 		}
 		txtId.setText(String.valueOf(departmentEntity.getId()));
 		txtName.setText(departmentEntity.getName());
+	}
+	
+		
+	/**
+	 * Preenche labels de erros de formulários com as mensagens de erros.
+	 * @param errors {@link Map} < String, String >
+	 */
+	private void setErrorMessages(Map<String, String> errors) {
+		
+		Set<String> fields = errors.keySet();
+		
+		if (fields.contains("name")) { // chave correspondente à instrução validationException.addError("name", "Field can't be empty");
+			labelErrorName.setText(errors.get("name"));
+		} 
 	}
 }
