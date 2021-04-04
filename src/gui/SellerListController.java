@@ -129,11 +129,12 @@ public class SellerListController implements Initializable, DataChangeListener {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 			// Injeta a dependência dept no controlador da tela de formulário:
-			SellerFormController dfController = loader.getController();
-			dfController.setSellerEntity(dept);
-			dfController.setServices(new SellerService(), new DepartmentService());
-			dfController.subscribeDataChangeListener(this);
-			dfController.updateFormData();
+			SellerFormController sfController = loader.getController();
+			sfController.setSellerEntity(dept);
+			sfController.setServices(new SellerService(), new DepartmentService());
+			sfController.loadAssociatedObjects();
+			sfController.subscribeDataChangeListener(this);
+			sfController.updateFormData();
 			
 			
 			
