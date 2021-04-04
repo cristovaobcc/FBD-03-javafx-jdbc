@@ -11,7 +11,7 @@
 
 <!-- Janela que lista todos os Departamentos -->
 
-<VBox prefHeight="315.0" prefWidth="398.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SellerListController">
+<VBox prefHeight="337.0" prefWidth="575.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SellerListController">
    <children>
       <Label prefHeight="24.0" prefWidth="207.0" text="Seller Registration">
          <font>
@@ -30,8 +30,11 @@
         <columns>
           <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="Id" />
           <TableColumn fx:id="tableColumnName" prefWidth="75.0" text="Name" />
-            <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" />
-            <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" />
+            <TableColumn fx:id="tableColumnEmail" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="tableColumnBirthDate" prefWidth="92.0" text="Birth Date" />
+            <TableColumn fx:id="tableColumnBaseSalary" prefWidth="107.0" text="Base Salary" />
+            <TableColumn fx:id="tableColumnEDIT" prefWidth="62.0" />
+            <TableColumn fx:id="tableColumnREMOVE" prefWidth="85.0" />
         </columns>
       </TableView>
    </children>
