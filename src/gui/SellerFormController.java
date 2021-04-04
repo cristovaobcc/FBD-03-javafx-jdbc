@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Seller;
 import model.exceptions.ValidationException;
+import model.services.DepartmentService;
 import model.services.SellerService;
 
 /**
@@ -34,7 +35,9 @@ import model.services.SellerService;
  */
 public class SellerFormController implements Initializable {
 			
-	private SellerService departmentService;
+	private DepartmentService deptService;
+	
+	private SellerService sellerService;
 	
 	private Seller sellerEntity;
 	
@@ -76,11 +79,13 @@ public class SellerFormController implements Initializable {
 	private Button btCancel;
 	
 	/**
-	 * Configura um Seller.
-	 * @param ds {@link SellerService}
+	 * Configura um SellerService e um DepartmentService.
+	 * @param sellerService {@link SellerService}
+	 * @param deptService {@link DepartmentService}
 	 */
-	public void setSellerService(SellerService ds) {
-		this.departmentService = ds;
+	public void setServices(SellerService sellerService, DepartmentService deptService) {
+		this.sellerService = sellerService;
+		this.deptService = deptService;	
 	}
 	
 	/**
@@ -106,13 +111,13 @@ public class SellerFormController implements Initializable {
 		if (sellerEntity == null) {
 			throw new IllegalStateException("departmentEntity is null");
 		}
-		if (departmentService == null) {
+		if (sellerService == null) {
 			throw new IllegalStateException("departmentService is null");
 		}
 		
 		try {
 			sellerEntity = getFormData();
-			departmentService.saveOrUpdate(sellerEntity);
+			sellerService.saveOrUpdate(sellerEntity);
 			notifyDataChangeListeners(); 
 			Utils.currentStage(event).close();
 			

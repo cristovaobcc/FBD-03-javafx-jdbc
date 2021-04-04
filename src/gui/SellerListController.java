@@ -34,6 +34,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Seller;
+import model.services.DepartmentService;
 import model.services.SellerService;
 
 /**
@@ -130,7 +131,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 			// Injeta a dependência dept no controlador da tela de formulário:
 			SellerFormController dfController = loader.getController();
 			dfController.setSellerEntity(dept);
-			dfController.setSellerService(new SellerService());
+			dfController.setServices(new SellerService(), new DepartmentService());
 			dfController.subscribeDataChangeListener(this);
 			dfController.updateFormData();
 			
