@@ -3,6 +3,7 @@
  */
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -27,6 +30,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Seller;
 import model.services.SellerService;
@@ -119,32 +124,32 @@ public class SellerListController implements Initializable, DataChangeListener {
 	 * @param parentStage {@link Stage}
 	 */
 	private void createDialogForm(Seller dept, String absoluteName, Stage parentStage) {
-//		try {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-//			Pane pane = loader.load();
-//			// Injeta a dependência dept no controlador da tela de formulário:
-//			SellerFormController dfController = loader.getController();
-//			dfController.setSellerEntity(dept);
-//			dfController.setSellerService(new SellerService());
-//			dfController.subscribeDataChangeListener(this);
-//			dfController.updateFormData();
-//			
-//			
-//			
-//			// Para carregar uma nova janela modal(que fica na frente e bloqueando a de baixo),
-//			// temos que carregar um novo stage:
-//			Stage dialogStage = new Stage();
-//			dialogStage.setTitle("Seller data");
-//			dialogStage.setScene(new Scene(pane));
-//			dialogStage.setResizable(false);
-//			dialogStage.initOwner(parentStage);
-//			dialogStage.initModality(Modality.WINDOW_MODAL); // método que diz se a janela criada será modal ou terá outro comportamento.
-//			dialogStage.showAndWait();
-//			
-//			
-//		} catch (IOException e) {
-//			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
-//		}
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+			// Injeta a dependência dept no controlador da tela de formulário:
+			SellerFormController dfController = loader.getController();
+			dfController.setSellerEntity(dept);
+			dfController.setSellerService(new SellerService());
+			dfController.subscribeDataChangeListener(this);
+			dfController.updateFormData();
+			
+			
+			
+			// Para carregar uma nova janela modal(que fica na frente e bloqueando a de baixo),
+			// temos que carregar um novo stage:
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Seller data");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL); // método que diz se a janela criada será modal ou terá outro comportamento.
+			dialogStage.showAndWait();
+			
+			
+		} catch (IOException e) {
+			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	@Override
