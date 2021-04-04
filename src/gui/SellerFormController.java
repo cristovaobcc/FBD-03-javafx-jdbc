@@ -1,8 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -33,7 +36,7 @@ public class SellerFormController implements Initializable {
 			
 	private SellerService departmentService;
 	
-	private Seller departmentEntity;
+	private Seller sellerEntity;
 	
 	// Lista de objetos interessados em receber o evento de mudança de dados.
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -85,7 +88,7 @@ public class SellerFormController implements Initializable {
 	 * @param entity {@link Seller}
 	 */
 	public void setSellerEntity(Seller entity) {
-		this.departmentEntity = entity;
+		this.sellerEntity = entity;
 	}
 	
 	/**
@@ -100,7 +103,7 @@ public class SellerFormController implements Initializable {
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
 		
-		if (departmentEntity == null) {
+		if (sellerEntity == null) {
 			throw new IllegalStateException("departmentEntity is null");
 		}
 		if (departmentService == null) {
@@ -108,8 +111,8 @@ public class SellerFormController implements Initializable {
 		}
 		
 		try {
-			departmentEntity = getFormData();
-			departmentService.saveOrUpdate(departmentEntity);
+			sellerEntity = getFormData();
+			departmentService.saveOrUpdate(sellerEntity);
 			notifyDataChangeListeners(); 
 			Utils.currentStage(event).close();
 			
@@ -151,7 +154,7 @@ public class SellerFormController implements Initializable {
 		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
 			validationException.addError("name", "Field can't be empty");
 		}
-		
+		// TODO: tratar o restante dos erros para exibir ao usuário.
 		dept.setName(txtName.getText());
 		
 		if (validationException.getErrors().size() > 0) {
@@ -174,21 +177,34 @@ public class SellerFormController implements Initializable {
 	
 	private void initializeNodes() {
 		Constraints.setTextFieldInteger(txtId);
-		Constraints.setTextFieldMaxLength(txtName, 30);
+		Constraints.setTextFieldMaxLength(txtName, 70);
+		Constraints.setTextFieldDouble(txtBaseSalary);
+		Constraints.setTextFieldMaxLength(txtEmail, 60);
+		Utils.formatDatePicker(dpBirthDate, "dd/MM/yyyy");
+		
 	}
 	
 	
 	/**
-	 * Popula os dados de Departament setado neste controller, para o formulário
+	 * Popula os dados de Seller setado neste controller, para o formulário
 	 * SellerForm.fxml.
 	 */
 	public void updateFormData() {
 		
-		if (departmentEntity == null) {
+		if (sellerEntity == null) {
 			throw new IllegalStateException("SellerEntity is null");
 		}
-		txtId.setText(String.valueOf(departmentEntity.getId()));
-		txtName.setText(departmentEntity.getName());
+		txtId.setText(String.valueOf(sellerEntity.getId()));
+		txtName.setText(sellerEntity.getName());
+		txtEmail.setText(sellerEntity.getEmail());
+		Locale.setDefault(Locale.US);
+		txtBaseSalary.setText(String.format("%.2f",sellerEntity.getBaseSalary()));
+		
+		if (sellerEntity.getBirthDate() != null) {
+			// Configura a data conforme local onde roda o programa.
+			dpBirthDate.setValue(LocalDate.ofInstant(sellerEntity.getBirthDate().toInstant(), ZoneId.systemDefault())  );
+		}
+		
 	}
 	
 		
