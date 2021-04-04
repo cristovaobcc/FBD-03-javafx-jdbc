@@ -53,6 +53,20 @@ public class Utils {
 		}
 
 	}
+	
+	/**
+	 * Converte um valor string para Double. Caso falhe, devolve null.
+	 * 
+	 * @param str String
+	 * @return Double
+	 */
+	public static Double tryParseToDouble(String str) {
+		try {
+			return Double.parseDouble(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
 
 	/**
 	 * Método que preenche a célula de uma tableColumn com um formato de data.
