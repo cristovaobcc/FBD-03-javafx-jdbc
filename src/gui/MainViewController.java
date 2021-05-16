@@ -58,7 +58,7 @@ public class MainViewController implements Initializable{
 	@FXML
 	public void onMenuItemAboutAction() {
 		// A função x -> {} não faz nada.
-		loadView("/gui/About.fxml", x ->  {});
+		loadView("/gui/about/About.fxml", x ->  {});
 	}
 	
 	@Override
